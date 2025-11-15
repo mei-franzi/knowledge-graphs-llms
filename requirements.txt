@@ -1,0 +1,7 @@
+langchain>=1.0.7
+langchain-experimental>=0.4.0
+langchain-openai>=1.0.3
+langchain-community>=0.3.0
+python-dotenv>=1.2.1
+pyvis>=0.3.2
+
