@@ -1,0 +1,127 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 1200px;
+                 background-color: #222222;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"font": {"color": "white"}, "group": "Concept", "id": "Urinary Prostaglandin Metabolites", "label": "Urinary Prostaglandin Metabolites", "shape": "dot", "title": "Concept"}, {"font": {"color": "white"}, "group": "Concept", "id": "Interindividual Variability", "label": "Interindividual Variability", "shape": "dot", "title": "Concept"}, {"font": {"color": "white"}, "group": "Concept", "id": "Inflammation Biomarkers", "label": "Inflammation Biomarkers", "shape": "dot", "title": "Concept"}, {"font": {"color": "white"}, "group": "Concept", "id": "Ibuprofen Pharmacokinetics", "label": "Ibuprofen Pharmacokinetics", "shape": "dot", "title": "Concept"}, {"font": {"color": "white"}, "group": "Concept", "id": "Additional Therapeutic Intervention", "label": "Additional Therapeutic Intervention", "shape": "dot", "title": "Concept"}, {"font": {"color": "white"}, "group": "Group", "id": "Healthy Subjects", "label": "Healthy Subjects", "shape": "dot", "title": "Group"}, {"font": {"color": "white"}, "group": "Group", "id": "Partial Responders", "label": "Partial Responders", "shape": "dot", "title": "Group"}, {"font": {"color": "white"}, "group": "Concept", "id": "Demographic Characteristics", "label": "Demographic Characteristics", "shape": "dot", "title": "Concept"}, {"font": {"color": "white"}, "group": "Drug", "id": "Ibuprofen", "label": "Ibuprofen", "shape": "dot", "title": "Drug"}, {"font": {"color": "white"}, "group": "Concept", "id": "Cyclooxygenase Inhibition", "label": "Cyclooxygenase Inhibition", "shape": "dot", "title": "Concept"}, {"font": {"color": "white"}, "group": "Concept", "id": "Differentially Expressed Genes", "label": "Differentially Expressed Genes", "shape": "dot", "title": "Concept"}, {"font": {"color": "white"}, "group": "Drug", "id": "Placebo", "label": "Placebo", "shape": "dot", "title": "Drug"}, {"font": {"color": "white"}, "group": "Concept", "id": "Inflammation\u2010Related Pathways", "label": "Inflammation\u2010Related Pathways", "shape": "dot", "title": "Concept"}, {"font": {"color": "white"}, "group": "Group", "id": "Complete Responders", "label": "Complete Responders", "shape": "dot", "title": "Group"}, {"font": {"color": "white"}, "group": "Concept", "id": "Analgesic Efficacy", "label": "Analgesic Efficacy", "shape": "dot", "title": "Concept"}, {"font": {"color": "white"}, "group": "Event", "id": "Surgical Extraction Of Bony Impacted Third Molars", "label": "Surgical Extraction Of Bony Impacted Third Molars", "shape": "dot", "title": "Event"}, {"font": {"color": "white"}, "group": "Concept", "id": "Pain Phenotyping", "label": "Pain Phenotyping", "shape": "dot", "title": "Concept"}, {"font": {"color": "white"}, "group": "Concept", "id": "Interleukin 8", "label": "Interleukin 8", "shape": "dot", "title": "Concept"}, {"font": {"color": "white"}, "group": "Concept", "id": "Gene Expression Profiling", "label": "Gene Expression Profiling", "shape": "dot", "title": "Concept"}, {"font": {"color": "white"}, "group": "Concept", "id": "Serum Tumor Necrosis Factor\u2010\u0391", "label": "Serum Tumor Necrosis Factor\u2010\u0391", "shape": "dot", "title": "Concept"}, {"font": {"color": "white"}, "group": "Concept", "id": "Insufficient Pain Relief", "label": "Insufficient Pain Relief", "shape": "dot", "title": "Concept"}, {"font": {"color": "white"}, "group": "Concept", "id": "Functional Neuroimaging", "label": "Functional Neuroimaging", "shape": "dot", "title": "Concept"}, {"font": {"color": "white"}, "group": "Concept", "id": "Nsaids", "label": "Nsaids", "shape": "dot", "title": "Concept"}, {"font": {"color": "white"}, "group": "Concept", "id": "Clinical Characteristics", "label": "Clinical Characteristics", "shape": "dot", "title": "Concept"}, {"font": {"color": "white"}, "group": "Concept", "id": "Peripheral Blood Mononuclear Cells", "label": "Peripheral Blood Mononuclear Cells", "shape": "dot", "title": "Concept"}, {"font": {"color": "white"}, "group": "Concept", "id": "Pharmacokinetic/Pharmacodynamic Assessments", "label": "Pharmacokinetic/Pharmacodynamic Assessments", "shape": "dot", "title": "Concept"}, {"font": {"color": "white"}, "group": "Concept", "id": "Inflammatory Prostanoid System", "label": "Inflammatory Prostanoid System", "shape": "dot", "title": "Concept"}]);
+                  edges = new vis.DataSet([{"arrows": "to", "from": "Interindividual Variability", "label": "underlying_mechanism", "to": "Analgesic Efficacy"}, {"arrows": "to", "from": "Analgesic Efficacy", "label": "associated_with", "to": "Nsaids"}, {"arrows": "to", "from": "Pain Phenotyping", "label": "performed_on", "to": "Healthy Subjects"}, {"arrows": "to", "from": "Functional Neuroimaging", "label": "performed_on", "to": "Healthy Subjects"}, {"arrows": "to", "from": "Pharmacokinetic/Pharmacodynamic Assessments", "label": "performed_on", "to": "Healthy Subjects"}, {"arrows": "to", "from": "Inflammation Biomarkers", "label": "performed_on", "to": "Healthy Subjects"}, {"arrows": "to", "from": "Gene Expression Profiling", "label": "performed_on", "to": "Healthy Subjects"}, {"arrows": "to", "from": "Healthy Subjects", "label": "underwent", "to": "Surgical Extraction Of Bony Impacted Third Molars"}, {"arrows": "to", "from": "Healthy Subjects", "label": "treated_with", "to": "Ibuprofen"}, {"arrows": "to", "from": "Healthy Subjects", "label": "treated_with", "to": "Placebo"}, {"arrows": "to", "from": "Analgesic Efficacy", "label": "not_associated_with", "to": "Demographic Characteristics"}, {"arrows": "to", "from": "Analgesic Efficacy", "label": "not_associated_with", "to": "Clinical Characteristics"}, {"arrows": "to", "from": "Analgesic Efficacy", "label": "not_associated_with", "to": "Ibuprofen Pharmacokinetics"}, {"arrows": "to", "from": "Analgesic Efficacy", "label": "not_associated_with", "to": "Cyclooxygenase Inhibition"}, {"arrows": "to", "from": "Partial Responders", "label": "required_rescue_medication", "to": "Ibuprofen"}, {"arrows": "to", "from": "Complete Responders", "label": "no_rescue_medication", "to": "Ibuprofen"}, {"arrows": "to", "from": "Complete Responders", "label": "greater_induction_of", "to": "Urinary Prostaglandin Metabolites"}, {"arrows": "to", "from": "Complete Responders", "label": "greater_induction_of", "to": "Serum Tumor Necrosis Factor\u2010\u0391"}, {"arrows": "to", "from": "Complete Responders", "label": "greater_induction_of", "to": "Interleukin 8"}, {"arrows": "to", "from": "Differentially Expressed Genes", "label": "enriched_in", "to": "Peripheral Blood Mononuclear Cells"}, {"arrows": "to", "from": "Differentially Expressed Genes", "label": "enriched_for", "to": "Inflammation\u2010Related Pathways"}, {"arrows": "to", "from": "Insufficient Pain Relief", "label": "associated_with", "to": "Inflammatory Prostanoid System"}, {"arrows": "to", "from": "Insufficient Pain Relief", "label": "need_for", "to": "Additional Therapeutic Intervention"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {"physics": {"forceAtlas2Based": {"gravitationalConstant": -100, "centralGravity": 0.01, "springLength": 200, "springConstant": 0.08}, "minVelocity": 0.75, "solver": "forceAtlas2Based"}};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>

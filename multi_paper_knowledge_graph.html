@@ -1,0 +1,127 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 1200px;
+                 background-color: #222222;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"font": {"color": "white"}, "group": "Drug", "id": "Nsaids", "label": "Nsaids", "shape": "dot", "size": 25, "title": "Drug (from SRP162774)"}, {"font": {"color": "white"}, "group": "Drug", "id": "Ibuprofen", "label": "Ibuprofen", "shape": "dot", "size": 25, "title": "Drug (from SRP162774)"}, {"font": {"color": "white"}, "group": "Gene", "id": "Prostaglandin Metabolites", "label": "Prostaglandin Metabolites", "shape": "dot", "size": 25, "title": "Gene (from SRP162774)"}, {"font": {"color": "white"}, "group": "Protein", "id": "Tumor Necrosis Factor\u2010\u0391", "label": "Tumor Necrosis Factor\u2010\u0391", "shape": "dot", "size": 25, "title": "Protein (from SRP162774)"}, {"font": {"color": "white"}, "group": "Protein", "id": "Interleukin 8", "label": "Interleukin 8", "shape": "dot", "size": 25, "title": "Protein (from SRP162774)"}, {"font": {"color": "white"}, "group": "Cell type", "id": "Peripheral Blood Mononuclear Cells", "label": "Peripheral Blood Mononuclear Cells", "shape": "dot", "size": 25, "title": "Cell type (from SRP162774)"}, {"font": {"color": "white"}, "group": "Biological process", "id": "Inflammatory Prostanoid System", "label": "Inflammatory Prostanoid System", "shape": "dot", "size": 25, "title": "Biological process (from SRP162774)"}, {"font": {"color": "white"}, "group": "Biological process", "id": "Inflammation", "label": "Inflammation", "shape": "dot", "size": 25, "title": "Biological process (from SRP162774)"}, {"font": {"color": "white"}, "group": "Biological process", "id": "Pain Relief", "label": "Pain Relief", "shape": "dot", "size": 25, "title": "Biological process (from SRP162774)"}, {"font": {"color": "white"}, "group": "Organism", "id": "Healthy Subjects", "label": "Healthy Subjects", "shape": "dot", "size": 25, "title": "Organism (from SRP162774)"}, {"font": {"color": "white"}, "group": "Drug", "id": "Acetaminophen", "label": "Acetaminophen\u2605", "shape": "dot", "size": 25, "title": "Drug (in 3 papers: SRP135678, SRP100513, SRP133057)"}, {"font": {"color": "white"}, "group": "Disease", "id": "Acute Liver Failure", "label": "Acute Liver Failure\u2605", "shape": "dot", "size": 25, "title": "Disease (in 2 papers: SRP135678, SRP133057)"}, {"font": {"color": "white"}, "group": "Organism", "id": "Mouse", "label": "Mouse", "shape": "dot", "size": 25, "title": "Organism (from SRP135678)"}, {"font": {"color": "white"}, "group": "Disease", "id": "Acute Drug-Induced Hepatic Injury", "label": "Acute Drug-Induced Hepatic Injury", "shape": "dot", "size": 25, "title": "Disease (from SRP135678)"}, {"font": {"color": "white"}, "group": "Disease", "id": "Acute Drug-Induced Hepatic Failure", "label": "Acute Drug-Induced Hepatic Failure", "shape": "dot", "size": 25, "title": "Disease (from SRP135678)"}, {"font": {"color": "white"}, "group": "Gene", "id": "Il-6", "label": "Il-6", "shape": "dot", "size": 25, "title": "Gene (from SRP135678)"}, {"font": {"color": "white"}, "group": "Gene", "id": "Tnf-A", "label": "Tnf-A", "shape": "dot", "size": 25, "title": "Gene (from SRP135678)"}, {"font": {"color": "white"}, "group": "Gene", "id": "Il-10", "label": "Il-10", "shape": "dot", "size": 25, "title": "Gene (from SRP135678)"}, {"font": {"color": "white"}, "group": "Biological process", "id": "Cellular Development Process", "label": "Cellular Development Process", "shape": "dot", "size": 25, "title": "Biological process (from SRP135678)"}, {"font": {"color": "white"}, "group": "Biological process", "id": "Cell Division", "label": "Cell Division", "shape": "dot", "size": 25, "title": "Biological process (from SRP135678)"}, {"font": {"color": "white"}, "group": "Biological process", "id": "Multicellular Organism Development", "label": "Multicellular Organism Development", "shape": "dot", "size": 25, "title": "Biological process (from SRP135678)"}, {"font": {"color": "white"}, "group": "Biological process", "id": "Cellular Response To Chemical Stimulus", "label": "Cellular Response To Chemical Stimulus", "shape": "dot", "size": 25, "title": "Biological process (from SRP135678)"}, {"font": {"color": "white"}, "group": "Biological process", "id": "Cellular Response To Stress", "label": "Cellular Response To Stress", "shape": "dot", "size": 25, "title": "Biological process (from SRP135678)"}, {"font": {"color": "white"}, "group": "Biological process", "id": "Cell Activation", "label": "Cell Activation", "shape": "dot", "size": 25, "title": "Biological process (from SRP135678)"}, {"font": {"color": "white"}, "group": "Gene", "id": "Myc", "label": "Myc", "shape": "dot", "size": 25, "title": "Gene (from SRP135678)"}, {"font": {"color": "white"}, "group": "Gene", "id": "Bag3", "label": "Bag3", "shape": "dot", "size": 25, "title": "Gene (from SRP135678)"}, {"font": {"color": "white"}, "group": "Gene", "id": "Btc", "label": "Btc", "shape": "dot", "size": 25, "title": "Gene (from SRP135678)"}, {"font": {"color": "white"}, "group": "Tissue", "id": "Liver", "label": "Liver\u2605", "shape": "dot", "size": 25, "title": "Tissue (in 2 papers: SRP135678, SRP100513)"}, {"font": {"color": "white"}, "group": "Disease", "id": "Drug Induced Liver Injury", "label": "Drug Induced Liver Injury", "shape": "dot", "size": 25, "title": "Disease (from SRP135678)"}, {"font": {"color": "white"}, "group": "Disease", "id": "Hepatotoxicity", "label": "Hepatotoxicity", "shape": "dot", "size": 25, "title": "Disease (from SRP135678)"}, {"font": {"color": "white"}, "group": "Disease", "id": "Acute Liver Injury", "label": "Acute Liver Injury", "shape": "dot", "size": 25, "title": "Disease (from SRP133057)"}, {"font": {"color": "white"}, "group": "Organism", "id": "United States", "label": "United States", "shape": "dot", "size": 25, "title": "Organism (from SRP133057)"}, {"font": {"color": "white"}, "group": "Protein", "id": "Nicotinamide Phosphoribosyltransferase", "label": "Nicotinamide Phosphoribosyltransferase", "shape": "dot", "size": 25, "title": "Protein (from SRP133057)"}, {"font": {"color": "white"}, "group": "Organism", "id": "C57Bl/6", "label": "C57Bl/6", "shape": "dot", "size": 25, "title": "Organism (from SRP133057)"}, {"font": {"color": "white"}, "group": "Gene", "id": "Nampt Gene", "label": "Nampt Gene", "shape": "dot", "size": 25, "title": "Gene (from SRP133057)"}, {"font": {"color": "white"}, "group": "Biological process", "id": "Oxidative Stress", "label": "Oxidative Stress", "shape": "dot", "size": 25, "title": "Biological process (from SRP133057)"}, {"font": {"color": "white"}, "group": "Biological process", "id": "Necrosis", "label": "Necrosis", "shape": "dot", "size": 25, "title": "Biological process (from SRP133057)"}, {"font": {"color": "white"}, "group": "Cell type", "id": "Hepatocytes", "label": "Hepatocytes", "shape": "dot", "size": 25, "title": "Cell type (from SRP133057)"}, {"font": {"color": "white"}, "group": "Drug", "id": "P7C3-A20", "label": "P7C3-A20", "shape": "dot", "size": 25, "title": "Drug (from SRP133057)"}, {"font": {"color": "white"}, "group": "Cell type", "id": "Monocyte-Derived Macrophages", "label": "Monocyte-Derived Macrophages", "shape": "dot", "size": 25, "title": "Cell type (from SRP100513)"}, {"font": {"color": "white"}, "group": "Disease", "id": "Liver Injury", "label": "Liver Injury", "shape": "dot", "size": 25, "title": "Disease (from SRP100513)"}, {"font": {"color": "white"}, "group": "Biological process", "id": "Neutrophil Activity", "label": "Neutrophil Activity", "shape": "dot", "size": 25, "title": "Biological process (from SRP100513)"}, {"font": {"color": "white"}, "group": "Cell type", "id": "Ly6Chi Monocytes", "label": "Ly6Chi Monocytes", "shape": "dot", "size": 25, "title": "Cell type (from SRP100513)"}, {"font": {"color": "white"}, "group": "Cell type", "id": "Macrophage Descendants", "label": "Macrophage Descendants", "shape": "dot", "size": 25, "title": "Cell type (from SRP100513)"}, {"font": {"color": "white"}, "group": "Cell type", "id": "Neutrophils", "label": "Neutrophils", "shape": "dot", "size": 25, "title": "Cell type (from SRP100513)"}, {"font": {"color": "white"}, "group": "Tissue", "id": "Centrilobular Necrotic Areas", "label": "Centrilobular Necrotic Areas", "shape": "dot", "size": 25, "title": "Tissue (from SRP100513)"}, {"font": {"color": "white"}, "group": "Biological process", "id": "Necroinflammatory Phase", "label": "Necroinflammatory Phase", "shape": "dot", "size": 25, "title": "Biological process (from SRP100513)"}, {"font": {"color": "white"}, "group": "Biological process", "id": "Reactive Oxygen Species", "label": "Reactive Oxygen Species", "shape": "dot", "size": 25, "title": "Biological process (from SRP100513)"}, {"font": {"color": "white"}, "group": "Gene", "id": "Nadph Oxidase 2", "label": "Nadph Oxidase 2", "shape": "dot", "size": 25, "title": "Gene (from SRP100513)"}, {"font": {"color": "white"}, "group": "Organism", "id": "Human", "label": "Human", "shape": "dot", "size": 25, "title": "Organism (from SRP100513)"}, {"font": {"color": "white"}, "group": "Cell type", "id": "Cd14+ Monocytes", "label": "Cd14+ Monocytes", "shape": "dot", "size": 25, "title": "Cell type (from SRP100513)"}, {"font": {"color": "white"}, "group": "Drug", "id": "Lipopolysaccharide", "label": "Lipopolysaccharide", "shape": "dot", "size": 25, "title": "Drug (from SRP100513)"}, {"font": {"color": "white"}, "group": "Cell type", "id": "Hepatocyte Apoptotic Bodies", "label": "Hepatocyte Apoptotic Bodies", "shape": "dot", "size": 25, "title": "Cell type (from SRP100513)"}, {"font": {"color": "white"}, "group": "Biological process", "id": "Rna-Seq-Based Transcriptome Profiling", "label": "Rna-Seq-Based Transcriptome Profiling", "shape": "dot", "size": 25, "title": "Biological process (from SRP100513)"}, {"font": {"color": "white"}, "group": "Biological process", "id": "Innate Immune Activity", "label": "Innate Immune Activity", "shape": "dot", "size": 25, "title": "Biological process (from SRP100513)"}, {"font": {"color": "white"}, "group": "Biological process", "id": "Cell Survival", "label": "Cell Survival", "shape": "dot", "size": 25, "title": "Biological process (from SRP100513)"}, {"font": {"color": "white"}, "group": "Cell type", "id": "Ly6Clo Momf", "label": "Ly6Clo Momf", "shape": "dot", "size": 25, "title": "Cell type (from SRP100513)"}, {"font": {"color": "white"}, "group": "Cell type", "id": "Apoptotic Neutrophils", "label": "Apoptotic Neutrophils", "shape": "dot", "size": 25, "title": "Cell type (from SRP100513)"}, {"font": {"color": "white"}, "group": "Biological process", "id": "Apoptotic Cell Clearance", "label": "Apoptotic Cell Clearance", "shape": "dot", "size": 25, "title": "Biological process (from SRP100513)"}]);
+                  edges = new vis.DataSet([{"arrows": "to", "from": "Ibuprofen", "label": "INDUCTION", "title": "INDUCTION (from SRP162774)", "to": "Prostaglandin Metabolites"}, {"arrows": "to", "from": "Ibuprofen", "label": "INDUCTION", "title": "INDUCTION (from SRP162774)", "to": "Tumor Necrosis Factor\u2010\u0391"}, {"arrows": "to", "from": "Ibuprofen", "label": "INDUCTION", "title": "INDUCTION (from SRP162774)", "to": "Interleukin 8"}, {"arrows": "to", "from": "Peripheral Blood Mononuclear Cells", "label": "ENRICHMENT", "title": "ENRICHMENT (from SRP162774)", "to": "Inflammation"}, {"arrows": "to", "from": "Inflammatory Prostanoid System", "label": "ASSOCIATION", "title": "ASSOCIATION (from SRP162774)", "to": "Pain Relief"}, {"arrows": "to", "from": "Healthy Subjects", "label": "TREATMENT", "title": "TREATMENT (from SRP162774)", "to": "Ibuprofen"}, {"arrows": "to", "from": "Acetaminophen", "label": "CAUSES", "title": "CAUSES (from SRP135678)", "to": "Acute Liver Failure"}, {"arrows": "to", "from": "Mouse", "label": "MODEL_FOR", "title": "MODEL_FOR (from SRP135678)", "to": "Acute Drug-Induced Hepatic Injury"}, {"arrows": "to", "from": "Mouse", "label": "MODEL_FOR", "title": "MODEL_FOR (from SRP135678)", "to": "Acute Drug-Induced Hepatic Failure"}, {"arrows": "to", "from": "Il-6", "label": "HIGHER_IN", "title": "HIGHER_IN (from SRP135678)", "to": "Acute Drug-Induced Hepatic Failure"}, {"arrows": "to", "from": "Tnf-A", "label": "HIGHER_IN", "title": "HIGHER_IN (from SRP135678)", "to": "Acute Drug-Induced Hepatic Failure"}, {"arrows": "to", "from": "Il-10", "label": "HIGHER_IN", "title": "HIGHER_IN (from SRP135678)", "to": "Acute Drug-Induced Hepatic Failure"}, {"arrows": "to", "from": "Myc", "label": "INCREASED_IN", "title": "INCREASED_IN (from SRP135678)", "to": "Liver"}, {"arrows": "to", "from": "Bag3", "label": "INCREASED_IN", "title": "INCREASED_IN (from SRP135678)", "to": "Liver"}, {"arrows": "to", "from": "Btc", "label": "INCREASED_IN", "title": "INCREASED_IN (from SRP135678)", "to": "Liver"}, {"arrows": "to", "from": "Btc", "label": "BIOMARKER_FOR", "title": "BIOMARKER_FOR (from SRP135678)", "to": "Drug Induced Liver Injury"}, {"arrows": "to", "from": "Acetaminophen", "label": "CAUSES", "title": "CAUSES (from SRP133057)", "to": "Acute Liver Injury"}, {"arrows": "to", "from": "Acetaminophen", "label": "CAUSES", "title": "CAUSES (from SRP133057)", "to": "Acute Liver Failure"}, {"arrows": "to", "from": "Acetaminophen", "label": "TRIGGERS", "title": "TRIGGERS (from SRP133057)", "to": "Oxidative Stress"}, {"arrows": "to", "from": "Acetaminophen", "label": "TRIGGERS", "title": "TRIGGERS (from SRP133057)", "to": "Necrosis"}, {"arrows": "to", "from": "Monocyte-Derived Macrophages", "label": "ROLE", "title": "ROLE (from SRP100513)", "to": "Liver Injury"}, {"arrows": "to", "from": "Acetaminophen", "label": "INDUCES", "title": "INDUCES (from SRP100513)", "to": "Liver Injury"}, {"arrows": "to", "from": "Neutrophil Activity", "label": "TERMINATION", "title": "TERMINATION (from SRP100513)", "to": "Liver"}, {"arrows": "to", "from": "Ly6Chi Monocytes", "label": "DIFFERENTIATES_INTO", "title": "DIFFERENTIATES_INTO (from SRP100513)", "to": "Macrophage Descendants"}, {"arrows": "to", "from": "Ly6Chi Monocytes", "label": "OVERLAP", "title": "OVERLAP (from SRP100513)", "to": "Neutrophils"}, {"arrows": "to", "from": "Neutrophils", "label": "LOCATED_IN", "title": "LOCATED_IN (from SRP100513)", "to": "Centrilobular Necrotic Areas"}, {"arrows": "to", "from": "Ly6Chi Monocytes", "label": "REGULATES", "title": "REGULATES (from SRP100513)", "to": "Reactive Oxygen Species"}, {"arrows": "to", "from": "Neutrophils", "label": "EXPRESSION", "title": "EXPRESSION (from SRP100513)", "to": "Nadph Oxidase 2"}, {"arrows": "to", "from": "Human", "label": "CONTAINS", "title": "CONTAINS (from SRP100513)", "to": "Cd14+ Monocytes"}, {"arrows": "to", "from": "Cd14+ Monocytes", "label": "INDUCES", "title": "INDUCES (from SRP100513)", "to": "Reactive Oxygen Species"}, {"arrows": "to", "from": "Lipopolysaccharide", "label": "STIMULATES", "title": "STIMULATES (from SRP100513)", "to": "Cd14+ Monocytes"}, {"arrows": "to", "from": "Hepatocyte Apoptotic Bodies", "label": "STIMULATES", "title": "STIMULATES (from SRP100513)", "to": "Cd14+ Monocytes"}, {"arrows": "to", "from": "Rna-Seq-Based Transcriptome Profiling", "label": "ANALYZES", "title": "ANALYZES (from SRP100513)", "to": "Neutrophils"}, {"arrows": "to", "from": "Ly6Chi Monocytes", "label": "REGULATES", "title": "REGULATES (from SRP100513)", "to": "Innate Immune Activity"}, {"arrows": "to", "from": "Ly6Chi Monocytes", "label": "REGULATES", "title": "REGULATES (from SRP100513)", "to": "Cell Survival"}, {"arrows": "to", "from": "Ly6Chi Monocytes", "label": "DIFFERENTIATES_INTO", "title": "DIFFERENTIATES_INTO (from SRP100513)", "to": "Ly6Clo Momf"}, {"arrows": "to", "from": "Ly6Clo Momf", "label": "ACCUMULATES", "title": "ACCUMULATES (from SRP100513)", "to": "Apoptotic Neutrophils"}, {"arrows": "to", "from": "Apoptotic Cell Clearance", "label": "INVOLVES", "title": "INVOLVES (from SRP100513)", "to": "Ly6Chi Monocytes"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {"physics": {"forceAtlas2Based": {"gravitationalConstant": -150, "centralGravity": 0.015, "springLength": 300, "springConstant": 0.05}, "minVelocity": 0.75, "solver": "forceAtlas2Based"}};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>
